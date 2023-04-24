@@ -1,8 +1,11 @@
 import pyfiglet
-import requests
+import json
 
 from InquirerPy import inquirer
-from clint.textui import prompt, puts, indent, colored, validators
+from tabulate import tabulate
+
+from time import sleep
+from tqdm import tqdm
 
 
 def main():
@@ -10,36 +13,37 @@ def main():
     title_text = pyfiglet.figlet_format("NBA CLI APP", font="digital")
     end_text = pyfiglet.figlet_format("SEE YA!", font="digital")
 
-    print("\n")
-    print(title_text)
+    print("\n", title_text)
 
     # will run until "Exit" is selected
     main_menu()
 
-    print("\n")
-    print(end_text)
+    print("\n", end_text)
 
 
 def main_menu():
 
-    intro = "Welcome to my NBA CLI App. To navigate through the app please use the “up” and “down” arrow keys \n" \
+    programmer = "Programmed by Jillian Vondy\n"
+    intro = "Welcome to my NBA CLI App. To navigate through the app please use the “up” and “down” arrow keys " \
             "to choose a menu option then hit “return” to select it. \n"
 
+    print(programmer)
     print(intro)
 
     # run the menu until the user chooses to exit
     while True:
         menu = inquirer.select(
 
-            message="What would you like to learn about?",
+            message="Main Menu: What would you like to learn about?",
             choices=["Conferences",
                      "Teams",
                      "Players",
                      "Games",
                      "Resources used",
-                     "Exit"]
-
+                     "Exit"],
         ).execute()
+
+        print("\n")
 
         if menu == "Conferences":
             conferences_menu()
@@ -64,7 +68,6 @@ def conferences_menu():
             choices=["View conferences and divisions",
                      "View standings by conference",
                      "Main menu"]
-
         ).execute()
 
         if menu == "View conferences and divisions":
@@ -106,7 +109,7 @@ def conferences_eastern():
 
 def conference_standings():
 
-    # will run until user selects "Return
+    # will run until user selects "Return"
     while True:
 
         menu = inquirer.select(
@@ -117,11 +120,47 @@ def conference_standings():
         ).execute()
 
         if menu == "Western":
-            print("\n PLACEHOLDER: Western \n")
+            western_standings()
         elif menu == "Eastern":
-            print("\n PLACEHOLDER: Eastern \n")
+            eastern_standings()
         else:
             return
+        
+
+def western_standings():
+
+    print("\n")
+
+    with open("standings-service.txt", "w") as standings_service_txt:
+        standings_service_txt.write("west")
+
+    for i in tqdm(range(10), total=10, desc="Getting Western Conference Standings"):
+        sleep(.2)
+
+    with open("standings-service.txt") as standings_service_txt:
+        data = standings_service_txt.read()
+
+    js_data = json.loads(data)
+
+    print(tabulate([(k) for k in js_data.items()], tablefmt="psql"))
+
+
+def eastern_standings():
+
+    print("\n")
+
+    with open("standings-service.txt", "w") as standings_service_txt:
+        standings_service_txt.write("east")
+
+    for i in tqdm(range(10), total=10, desc="Getting Eastern Conference Standings"):
+        sleep(.2)
+
+    with open("standings-service.txt") as standings_service_txt:
+        data = standings_service_txt.read()
+
+    js_data = json.loads(data)
+
+    print(tabulate([(k) for k in js_data.items()], tablefmt="psql"))
 
 
 def teams_menu():
@@ -188,7 +227,7 @@ def games_menu():
 
 
 def resources():
-    print("\n PLACEHOLDER: resources used \n")
+    print("PLACEHOLDER: resources used \n")
 
 
 if __name__ == "__main__":

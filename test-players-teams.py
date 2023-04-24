@@ -46,7 +46,7 @@ headers = {
 eastern_conference = requests.request("GET", url, headers=headers, params=querystring)
 
 for team in eastern_conference:
-    print(team[0])
+    print(team)
 
 
 # western_conference = [team for team in team_dict if team['conference'] == 'Western']
