@@ -18,12 +18,12 @@ while True:
     else:
         group = ""
 
-    if group !="":
+    if group != "":
 
-        querystring = {"league":"12",
-                    "season":"2022-2023",
-                    "stage":"NBA",
-                    "group": group}
+        querystring = {"league": "12",
+                       "season": "2022-2023",
+                       "stage": "NBA",
+                       "group": group}
 
         headers = {
             "content-type": "application/octet-stream",

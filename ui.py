@@ -1,5 +1,6 @@
 import pyfiglet
 import json
+import zmq
 
 from InquirerPy import inquirer
 from tabulate import tabulate
@@ -13,12 +14,14 @@ def main():
     title_text = pyfiglet.figlet_format("NBA CLI APP", font="digital")
     end_text = pyfiglet.figlet_format("SEE YA!", font="digital")
 
-    print("\n", title_text)
+    print("\n")
+    print(title_text)
 
     # will run until "Exit" is selected
     main_menu()
 
-    print("\n", end_text)
+    print("\n")
+    print(end_text)
 
 
 def main_menu():
@@ -40,7 +43,7 @@ def main_menu():
                      "Players",
                      "Games",
                      "Resources used",
-                     "Exit"],
+                     "Exit"]
         ).execute()
 
         print("\n")
@@ -71,15 +74,15 @@ def conferences_menu():
         ).execute()
 
         if menu == "View conferences and divisions":
-            conferences_divisions()
+            conferences_divisions_menu()
         elif menu == "View standings by conference":
-            conference_standings()
+            conference_standings_menu()
         else:
             print("\n")
             return
 
 
-def conferences_divisions():
+def conferences_divisions_menu():
 
     # will run until user selects "Return
     while True:
@@ -103,6 +106,7 @@ def conferences_western():
 
     print("\n")
 
+    # TO DO: revise to work with ZeroMQ socket
     # pass info to "conference division service" (what conference we would like to get the divisions of)
     with open("conference-division-service.txt", "w") as conference_divisions_service_txt:
         conference_divisions_service_txt.write("West")
@@ -119,13 +123,14 @@ def conferences_western():
 
     # display the standings table
     headings = ["Division", "Teams"]
-    print(tabulate([(division) for division in js_data.items()], headers=headings, tablefmt="psql"))
+    print(tabulate([division for division in js_data.items()], headers=headings, tablefmt="psql"))
 
 
 def conferences_eastern():
 
     print("\n")
 
+    # TO DO: revise to work with ZeroMQ socket
     # pass info to "conference division service" (what conference we would like to get the divisions of)
     with open("conference-division-service.txt", "w") as conference_divisions_service_txt:
         conference_divisions_service_txt.write("East")
@@ -142,10 +147,10 @@ def conferences_eastern():
 
     # display the standings table
     headings = ["Division", "Teams"]
-    print(tabulate([(division) for division in js_data.items()], headers=headings, tablefmt="psql"))
+    print(tabulate([division for division in js_data.items()], headers=headings, tablefmt="psql"))
 
 
-def conference_standings():
+def conference_standings_menu():
 
     # will run until user selects "Return"
     while True:
@@ -169,6 +174,7 @@ def western_standings():
 
     print("\n")
 
+    # TO DO: revise to work with ZeroMQ socket
     # pass info to "standings service" (what conference we would like to get the standings for)
     with open("standings-service.txt", "w") as standings_service_txt:
         standings_service_txt.write("west")
@@ -185,13 +191,14 @@ def western_standings():
 
     # display the standings table
     headings = ["Position", "Team"]
-    print(tabulate([(position) for position in js_data.items()], headers=headings, tablefmt="psql"))
+    print(tabulate([position for position in js_data.items()], headers=headings, tablefmt="psql"))
 
 
 def eastern_standings():
 
     print("\n")
 
+    # TO DO: revise to work with ZeroMQ socket
     # pass info to "standings service" (what conference we would like to get the standings for)
     with open("standings-service.txt", "w") as standings_service_txt:
         standings_service_txt.write("east")
@@ -208,7 +215,7 @@ def eastern_standings():
 
     # display the standings table
     headings = ["Position", "Team"]
-    print(tabulate([(position) for position in js_data.items()], headers=headings, tablefmt="psql"))
+    print(tabulate([position for position in js_data.items()], headers=headings, tablefmt="psql"))
 
 
 def teams_menu():
@@ -245,12 +252,52 @@ def players_menu():
         ).execute()
 
         if menu == "Get stats for a specific player":
-            print("\n PLACEHOLDER: Get stats for a specific player \n")
+            specific_player()
         elif menu == "Get a random player":
-            print("\n PLACEHOLDER: Get a random player \n")
+            random_player()
         else:
             print("\n")
             return
+
+
+def specific_player():
+
+    context = zmq.Context()
+
+    player = input("Enter player name:")
+
+    print("Connecting to NBA player server...")
+    socket = context.socket(zmq.REQ)
+    socket.connect("tcp://localhost:5555")
+
+    print(f"Sending request...")
+    socket.send_string(player)
+
+    # receive serialized data (JSON) from microservice
+    player_data = json.loads(socket.recv())
+
+    # TO DO: implement error message (player not found)
+
+    print(tabulate([data for data in player_data.items()], tablefmt="psql"))
+    print("\n")
+
+
+def random_player():
+
+    context = zmq.Context()
+
+    print("Connecting to NBA player server...")
+    socket = context.socket(zmq.REQ)
+    socket.connect("tcp://localhost:5555")
+
+    print(f"Sending request...")
+    socket.send_string("random")
+
+    # receive serialized data (JSON) from microservice
+    rand_player = socket.recv()
+
+    print(rand_player)
+    print("\n")
 
 
 def games_menu():

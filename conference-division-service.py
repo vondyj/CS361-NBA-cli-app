@@ -13,15 +13,13 @@ while True:
         conference = conference_division_txt.read()
 
     page = 0
-    querystring = {"page":str(page)}
+    querystring = {"page": str(page)}
 
     if conference == 'West' or conference == 'East':
     
-        headers = {
-	        "content-type": "application/octet-stream",
-	        "X-RapidAPI-Key": "819d583bd4mshb1f58b42eb6bd5fp143f39jsn6aed4cda8d08",
-	        "X-RapidAPI-Host": "free-nba.p.rapidapi.com"
-        }
+        headers = {"content-type": "application/octet-stream",
+                   "X-RapidAPI-Key": "819d583bd4mshb1f58b42eb6bd5fp143f39jsn6aed4cda8d08",
+                   "X-RapidAPI-Host": "free-nba.p.rapidapi.com"}
 
         print(f"Getting {conference}ern Conference Division data...")
 
