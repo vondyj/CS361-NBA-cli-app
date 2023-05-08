@@ -6,24 +6,20 @@
 **4/13/23**
 [Free NBA API: How to Use The Free NBA API with Python, PHP, Ruby and JavaScript](https://rapidapi.com/blog/free-nba-api-with-python-php-ruby-and-javascript/)
 
-  4/13/23
-  https://www.w3schools.com/python/pandas/pandas_dataframes.asp
+4/13/23
+https://pypi.org/project/clint/
 
-  4/13/23
-  https://pypi.org/project/clint/
+4/13/23
+https://www.geeksforgeeks.org/python-ascii-art-using-pyfiglet-module/?ref=lbp#
 
-  4/13/23
-  https://www.geeksforgeeks.org/python-ascii-art-using-pyfiglet-module/?ref=lbp#
-
-  4/13/23
-  https://github.com/kennethreitz-archive/clint/blob/master/examples/prompt.py
+4/13/23
+https://github.com/kennethreitz-archive/clint/blob/master/examples/prompt.py
+  
 ## APIs
 
-  4/13/23
-  https://rapidapi.com/theapiguy/api/free-nba
 
-  4/23/23
-  https://app.balldontlie.io/
+### [Free NBA](https://rapidapi.com/theapiguy/api/free-nba)
 
-  4/13/23 
-  https://rapidapi.com/api-sports/api/api-basketball
+### [Ball Don't Lie](https://app.balldontlie.io/)
+
+### [API Basketball](https://rapidapi.com/api-sports/api/api-basketball)
