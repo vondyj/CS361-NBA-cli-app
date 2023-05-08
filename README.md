@@ -4,12 +4,12 @@
 [Python Requests – How to Interact with Web Services using Python ](https://www.freecodecamp.org/news/how-to-interact-with-web-services-using-python/)
 ### Free NBA API
 [How to Use The Free NBA API with Python, PHP, Ruby and JavaScript](https://rapidapi.com/blog/free-nba-api-with-python-php-ruby-and-javascript/)
+### Geeks for Geeks
+[Python | ASCII art using pyfiglet module](https://www.geeksforgeeks.org/python-ascii-art-using-pyfiglet-module/?ref=lbp#)
 ### InquirerPy
 [Read the docs](https://inquirerpy.readthedocs.io/en/latest/)
 ### ZeroMQ 
 [Get started](https://zeromq.org/get-started/)
-### Geeks for Geeks
-[Python | ASCII art using pyfiglet module](https://www.geeksforgeeks.org/python-ascii-art-using-pyfiglet-module/?ref=lbp#)
   
 ## APIs
 
