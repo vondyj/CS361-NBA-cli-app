@@ -1,1 +1,1 @@
-{"1": "Milwaukee Bucks", "2": "Boston Celtics", "3": "Philadelphia 76ers", "4": "Cleveland Cavaliers", "5": "New York Knicks", "6": "Brooklyn Nets", "7": "Miami Heat", "8": "Atlanta Hawks", "9": "Toronto Raptors", "10": "Chicago Bulls", "11": "Washington Wizards", "12": "Orlando Magic", "13": "Indiana Pacers", "14": "Charlotte Hornets", "15": "Detroit Pistons"}
+west

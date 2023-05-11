@@ -35,9 +35,3 @@ while True:
         player_data = data['first_name'] + " " + data['last_name']
         print("Returning random player name")
         socket.send_string(player_data)
-
-
-
-
-
-
