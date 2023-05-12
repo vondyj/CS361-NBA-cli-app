@@ -1,8 +1,7 @@
 import json
+import zmq
 
 from InquirerPy import inquirer
-from tqdm import tqdm
-from time import sleep
 from tabulate import tabulate
 
 
@@ -26,7 +25,7 @@ def conferences_menu():
 
 
 def conferences_divisions_menu():
-    # will run until user selects "Return
+    # will run until user selects "Return"
     while True:
 
         menu = inquirer.select(
@@ -37,57 +36,11 @@ def conferences_divisions_menu():
         ).execute()
 
         if menu == "Western":
-            conferences_western()
+            conferences("West Divisions")
         elif menu == "Eastern":
-            conferences_eastern()
+            conferences("East Divisions")
         else:
             return
-
-
-def conferences_western():
-    print("\n")
-
-    # TO DO: revise to work with ZeroMQ socket
-    # pass info to "conference division service" (what conference we would like to get the divisions of)
-    with open("conference-division-service.txt", "w") as conference_divisions_service_txt:
-        conference_divisions_service_txt.write("West")
-
-    # wait for standings service to get info and send it back
-    for _ in tqdm(range(10), total=10, desc="Getting Western Conference Divisions"):
-        sleep(.2)
-
-    # read the data sent from conference division service
-    with open("conference-division-service.txt") as conference_divisions_service_txt:
-        data = conference_divisions_service_txt.read()
-
-    js_data = json.loads(data)
-
-    # display the standings table
-    headings = ["Division", "Teams"]
-    print(tabulate([division for division in js_data.items()], headers=headings, tablefmt="psql"))
-
-
-def conferences_eastern():
-    print("\n")
-
-    # TO DO: revise to work with ZeroMQ socket
-    # pass info to "conference division service" (what conference we would like to get the divisions of)
-    with open("conference-division-service.txt", "w") as conference_divisions_service_txt:
-        conference_divisions_service_txt.write("East")
-
-    # wait for standings service to get info and send it back
-    for i in tqdm(range(10), total=10, desc="Getting Eastern Conference Divisions"):
-        sleep(.2)
-
-    # read the data sent from conference division service
-    with open("conference-division-service.txt") as conference_divisions_service_txt:
-        data = conference_divisions_service_txt.read()
-
-    js_data = json.loads(data)
-
-    # display the standings table
-    headings = ["Division", "Teams"]
-    print(tabulate([division for division in js_data.items()], headers=headings, tablefmt="psql"))
 
 
 def conference_standings_menu():
@@ -102,54 +55,50 @@ def conference_standings_menu():
         ).execute()
 
         if menu == "Western":
-            western_standings()
+            standings("West Standings")
         elif menu == "Eastern":
-            eastern_standings()
+            standings("East Standings")
         else:
             return
+        
+
+def start_socket():
+    context = zmq.Context()
+    socket = context.socket(zmq.REQ)
+    socket.connect("tcp://localhost:5554")
+
+    return socket
 
 
-def western_standings():
-    print("\n")
+def conferences(conference):
 
-    # TO DO: revise to work with ZeroMQ socket
-    # pass info to "standings service" (what conference we would like to get the standings for)
-    with open("standings-service.txt", "w") as standings_service_txt:
-        standings_service_txt.write("west")
+    # send request to conference-service.py
+    socket = start_socket()
+    socket.send_string(conference)
 
-    # wait for standings service to get info and send it back
-    for i in tqdm(range(10), total=10, desc="Getting Western Conference Standings"):
-        sleep(.2)
+    # receive response from conference-service.py
+    js_data = json.loads(socket.recv_json())
 
-    # read the data sent from standings service
-    with open("standings-service.txt") as standings_service_txt:
-        data = standings_service_txt.read()
+    # display table title
+    print(f"\n{conference[:-10]}ern Conference Divisions")
 
-    js_data = json.loads(data)
-
-    # display the standings table
-    headings = ["Position", "Team"]
-    print(tabulate([position for position in js_data.items()], headers=headings, tablefmt="psql"))
+    # display the conference table
+    headings = ["Division", "Teams"]
+    print(tabulate((item for item in js_data.items()), headings, maxcolwidths=[None, 40], tablefmt="heavy_grid"))
 
 
-def eastern_standings():
-    print("\n")
+def standings(conference):
 
-    # TO DO: revise to work with ZeroMQ socket
-    # pass info to "standings service" (what conference we would like to get the standings for)
-    with open("standings-service.txt", "w") as standings_service_txt:
-        standings_service_txt.write("east")
+    # send request to conference-service.py
+    socket = start_socket()
+    socket.send_string(conference)
 
-    # wait for standings service to get info and send it back
-    for i in tqdm(range(10), total=10, desc="Getting Eastern Conference Standings"):
-        sleep(.2)
+    # receive response from conference-service.py
+    js_data = json.loads(socket.recv_json())
 
-    # read the data sent from standings service
-    with open("standings-service.txt") as standings_service_txt:
-        data = standings_service_txt.read()
-
-    js_data = json.loads(data)
+    # display table title
+    print(f"\n{conference[:-10]}ern Conference Standings")
 
     # display the standings table
-    headings = ["Position", "Team"]
-    print(tabulate([position for position in js_data.items()], headers=headings, tablefmt="psql"))
+    headings = ["Position", "Team", "Wins", "Losses"]
+    print(tabulate((item for item in js_data), headings, tablefmt="heavy_grid"))

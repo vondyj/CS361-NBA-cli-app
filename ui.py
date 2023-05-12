@@ -11,8 +11,8 @@ from resources import resources
 
 def main():
 
-    title_text = pyfiglet.figlet_format("NBA CLI APP", font="digital")
-    end_text = pyfiglet.figlet_format("SEE YA!", font="digital")
+    title_text = pyfiglet.figlet_format("NBA CLI APP", font="3-d")
+    end_text = pyfiglet.figlet_format("SEE YA!", font="3-d")
 
     print("\n")
     print(title_text)
