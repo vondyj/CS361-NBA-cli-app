@@ -26,41 +26,37 @@ def players_menu():
             break
 
 
-def specific_player():
-
+def start_socket():
     context = zmq.Context()
-
-    player = input("Enter player name:")
-
-    print("Connecting to NBA player server...")
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://localhost:5555")
 
-    print(f"Sending request...")
-    socket.send_string(player)
+    return socket
+
+
+def specific_player():
+
+    socket = start_socket()
+    user_input = input("Enter player name: ")
+
+    # send request to NBA_Player_Microservice.py
+    socket.send_string(user_input)
 
     # receive serialized data (JSON) from microservice
     player_data = json.loads(socket.recv())
 
-    # TO DO: implement error message (player not found)
-
-    print(tabulate([data for data in player_data.items()], tablefmt="psql"))
-    print("\n")
+    # pretty print (for display purposes only)
+    print(json.dumps(player_data, indent=4))
 
 
 def random_player():
 
-    context = zmq.Context()
+    socket = start_socket()
 
-    print("Connecting to NBA player server...")
-    socket = context.socket(zmq.REQ)
-    socket.connect("tcp://localhost:5555")
-
-    print(f"Sending request...")
+    # send request to NBA_Player_Microservice.py
     socket.send_string("random")
 
-    # receive serialized data (JSON) from microservice
-    rand_player = socket.recv()
+    # receive response from NBA_Player_Microservice.py
+    player = socket.recv_string()
 
-    print(rand_player)
-    print("\n")
+    print(f"\n{player}\n")
