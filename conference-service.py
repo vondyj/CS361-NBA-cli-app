@@ -7,6 +7,9 @@ context = zmq.Context()
 socket = context.socket(zmq.REP)
 socket.bind("tcp://*:5554")
 
+# initial startup message
+print("\nSocket listening at port 5554...")
+
 while True:
 
     # receive request from client
@@ -16,7 +19,6 @@ while True:
     if message == "West Divisions" or message == "East Divisions":
 
         conference = message[:-10]
-
         print(f"\nRequesting {conference}ern Conference Division data...")
 
         # set up request
@@ -30,6 +32,7 @@ while True:
         data = response.json()
         divisions = {}
 
+        # parse data received to return to client
         for value in data['data']:
             if value['conference'] == conference:
 
@@ -38,9 +41,8 @@ while True:
                 else:
                     divisions[value['division']] = divisions[value['division']] + ", " + (value['full_name'])
 
-        print(f"Sending {message} Conference Division data...\n")
-
         # send response
+        print(f"Sending {message} Conference Division data...\n")
         socket.send_json(json.dumps(divisions))
 
     # handle valid standings requests
@@ -77,6 +79,7 @@ while True:
 
             standings = []
 
+            # parse data to return to client
             for value in data['response'][0]:
 
                 position, name = value['position'], value['team']['name']
@@ -87,3 +90,8 @@ while True:
             print(f"Sending {group} standings data...\n")
 
             socket.send_json(json.dumps(standings))
+
+    # handle any other requests (errors)
+    else:
+        error_msg = "ERROR: Please try again."
+        socket.send_json(json.dumps(error_msg))

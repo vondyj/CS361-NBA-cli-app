@@ -11,17 +11,16 @@ from resources import resources
 
 def main():
 
+    # set up intro and exit text
     title_text = pyfiglet.figlet_format("NBA CLI APP", font="3-d")
     end_text = pyfiglet.figlet_format("SEE YA!", font="3-d")
 
-    print("\n")
-    print(title_text)
+    print(f"\n{title_text}")
 
     # will run until "Exit" is selected
     main_menu()
 
-    print("\n")
-    print(end_text)
+    print(f"\n{end_text}\n")
 
 
 def main_menu():
@@ -31,7 +30,7 @@ def main_menu():
 
     print(intro)
 
-    # run the menu until the user chooses to exit
+    # display the menu until the user chooses "Exit"
     while True:
         menu = inquirer.select(
 
@@ -46,15 +45,15 @@ def main_menu():
 
         print("\n")
 
-        if menu == "Conferences":
+        if menu == "Conferences":           # implemented
             conferences_menu()
-        elif menu == "Teams":
+        elif menu == "Teams":               # TO DO
             teams_menu()
-        elif menu == "Players":
+        elif menu == "Players":             # in progress
             players_menu()
-        elif menu == "Games":
+        elif menu == "Games":               # TO DO
             games_menu()
-        elif menu == "Resources used":
+        elif menu == "Resources used":      # TO DO
             resources()
         else:
             return
