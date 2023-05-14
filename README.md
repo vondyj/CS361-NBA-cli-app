@@ -41,7 +41,6 @@ rand_player = socket.recv().decode()
   
 ## APIs
 
-
+### [API-BASKETBALL](https://rapidapi.com/api-sports/api/api-basketball)
 ### [Free NBA](https://rapidapi.com/theapiguy/api/free-nba)
-
 ### [Ball Don't Lie](https://app.balldontlie.io/)
