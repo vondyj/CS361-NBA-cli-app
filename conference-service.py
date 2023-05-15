@@ -1,3 +1,7 @@
+# A microservice that retrieves information about NBA conferences (divisions or standings) from the following APIs.
+# API-BASKETBALL - https://rapidapi.com/api-sports/api/api-basketball
+# Free NBA - https://rapidapi.com/theapiguy/api/free-nba
+
 import requests
 import json
 import zmq
@@ -14,12 +18,13 @@ while True:
 
     # receive request from client
     message = socket.recv_string()
+    print(f"\nReceived message: {message}")
 
     # handle valid division requests
     if message == "West Divisions" or message == "East Divisions":
 
         conference = message[:-10]
-        print(f"\nRequesting {conference}ern Conference Division data...")
+        print(f"Getting {conference}ern Conference Division data...")
 
         # set up request
         url = "https://free-nba.p.rapidapi.com/teams"
@@ -59,7 +64,7 @@ while True:
 
         if group != "":
 
-            print(f"\nRequesting {group} standings data...")
+            print(f"Getting {group} standings data...")
 
             # set up request
             url = "https://api-basketball.p.rapidapi.com/standings"
@@ -82,8 +87,10 @@ while True:
             # parse data to return to client
             for value in data['response'][0]:
 
-                position, name = value['position'], value['team']['name']
-                wins, losses = value['games']['win']['total'], value['games']['lose']['total']
+                position = value['position']
+                name = value['team']['name']
+                wins = value['games']['win']['total']
+                losses = value['games']['lose']['total']
 
                 standings.append([position, name, wins, losses])
 
