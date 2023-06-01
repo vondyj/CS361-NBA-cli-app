@@ -46,6 +46,7 @@ def conference_divisions_menu():
 
 
 def conference_standings_menu():
+
     # will run until user selects "Return"
     while True:
 
