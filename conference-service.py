@@ -59,6 +59,8 @@ def parse_standings_data(data):
 
     standings = []
 
+    # test = [[x] for x in data['response'][0]]
+
     # parse data to return to client
     for value in data['response'][0]:           # re-write as list comprehension?
         position = value['position']
