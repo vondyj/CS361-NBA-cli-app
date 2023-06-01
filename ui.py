@@ -11,24 +11,12 @@ from resources import resources
 
 def main():
 
-    # set up intro and exit text
-    title_text = pyfiglet.figlet_format("NBA CLI APP", font="3-d")
-    end_text = pyfiglet.figlet_format("SEE YA!", font="3-d")
-
-    print(f"\n{title_text}")
-
-    # will run until "Exit" is selected
+    intro_message()
     main_menu()
-
-    print(f"\n{end_text}\n")
+    outro_message()
 
 
 def main_menu():
-
-    intro = "Welcome to my NBA CLI App. To navigate through the app please use the “up” and “down” arrow keys " \
-            "to choose a menu option then hit “return” to select it. \n"
-
-    print(intro)
 
     # display the menu until the user chooses "Exit"
     while True:
@@ -57,6 +45,23 @@ def main_menu():
             resources()
         else:
             return
+
+
+def intro_message():
+
+    title_text = pyfiglet.figlet_format("NBA CLI APP", font="3-d")
+    intro_text = f"\nWelcome to my NBA CLI App. To navigate through the app please use the “up” and “down” arrow keys" \
+                 " to choose a menu option then hit “return” to select it.\n"
+
+    print(f"\n")
+    print(title_text)
+    print(intro_text)
+
+
+def outro_message():
+
+    end_text = pyfiglet.figlet_format("SEE YA!", font="3-d")
+    print(end_text)
 
 
 if __name__ == "__main__":
