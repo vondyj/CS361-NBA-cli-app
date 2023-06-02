@@ -1,7 +1,8 @@
-import json
 import zmq
 
 from InquirerPy import inquirer
+from tabulate import tabulate
+from datetime import datetime
 
 
 def games_menu():
@@ -16,24 +17,14 @@ def games_menu():
 
         ).execute()
 
-        if menu == "Display games in progress":
-            games_in_progress()
-        elif menu == "View information about a past game":
-            print("\n PLACEHOLDER: View information about a past game \n")
-        else:
-            print("\n")
-            return
-
-
-def games_in_progress():
-
-    socket = start_socket()
-    socket.send_string("in progress")
-
-    # receive response
-    js_data = json.loads(socket.recv_json())
-
-    print(json.dumps(js_data, indent=4))
+        match menu:
+            case "Display games in progress":
+                games_in_progress("in progress")
+            case "View information about a past game":
+                print("\n PLACEHOLDER: View information about a past game \n")
+            case _:
+                print("\n")
+                return
 
 
 def start_socket():
@@ -41,7 +32,25 @@ def start_socket():
     # set up communication with conference-service.py
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
-    socket.connect("tcp://localhost:5553")
+    socket.connect("tcp://localhost:9999")
 
     # return the socket to the method that called it for communication purposes
     return socket
+
+
+def games_in_progress(message):
+
+    socket = start_socket()
+    socket.send_string(message)
+
+    data = socket.recv_json()
+
+    match data:
+        case "None":
+            print(f"\nSorry, there are no NBA games today.\n")
+        case _:
+            print(f"\n NBA Games on {datetime.today().strftime('%Y-%m-%d')}")
+
+            # display the games in progress table
+            headings = ["Home Team", "Visitor Team", "Home Score", "Visitor Score", "Period"]
+            print(tabulate((item for item in data), headings, tablefmt="heavy_grid"))

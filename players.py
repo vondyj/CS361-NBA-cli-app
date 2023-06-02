@@ -17,13 +17,14 @@ def players_menu():
 
         ).execute()
 
-        if menu == "Get information about a specific player":
-            get_specific_player()
-        elif menu == "Get a random player":
-            get_random_player()
-        else:
-            print("\n")
-            return
+        match menu:
+            case "Get information about a specific player":
+                get_specific_player()
+            case "Get a random player":
+                get_random_player()
+            case _:
+                print("\n")
+                return
 
 
 def start_socket():
@@ -50,13 +51,12 @@ def get_specific_player():
     # receive serialized data (JSON) from microservice
     player_data = json.loads(socket.recv())
 
-    if player_data != "ERROR: Invalid Search":
-        table_data = parse_player_data(player_data)
-        # display data
-        print(tabulate(table_data, tablefmt="heavy_grid"))
-
-    else:
-        print(f"\n{player_data}\n")
+    match player_data:
+        case "ERROR: Invalid Search":
+            print(f"\n{player_data}\n")
+        case _:
+            table_data = parse_player_data(player_data)
+            print(tabulate(table_data, tablefmt="heavy_grid"))
 
 
 def parse_player_data(data):

@@ -16,13 +16,14 @@ def conferences_menu():
                      "Main menu"]
         ).execute()
 
-        if menu == "View conferences and divisions":
-            conference_divisions_menu()
-        elif menu == "View standings by conference (regular season)":
-            conference_standings_menu()
-        else:
-            print("\n")
-            return
+        match menu:
+            case "View conferences and divisions":
+                conference_divisions_menu()
+            case "View standings by conference (regular season)":
+                conference_standings_menu()
+            case _:
+                print("\n")
+                return
 
 
 def conference_divisions_menu():
@@ -37,12 +38,13 @@ def conference_divisions_menu():
                      "Return"]
         ).execute()
 
-        if menu == "Western":
-            conferences("West Divisions")
-        elif menu == "Eastern":
-            conferences("East Divisions")
-        else:
-            return
+        match menu:
+            case "Western":
+                conferences("West Divisions")
+            case "Eastern":
+                conferences("East Divisions")
+            case _:
+                return
 
 
 def conference_standings_menu():
@@ -57,12 +59,13 @@ def conference_standings_menu():
                      "Return"]
         ).execute()
 
-        if menu == "Western":
-            standings("West Standings")
-        elif menu == "Eastern":
-            standings("East Standings")
-        else:
-            return
+        match menu:
+            case "Western":
+                standings("West Standings")
+            case "Eastern":
+                standings("East Standings")
+            case _:
+                return
         
 
 def start_socket():
