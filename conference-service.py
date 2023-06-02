@@ -7,12 +7,12 @@ import requests
 import json
 import zmq
 
+from datetime import datetime
+
 # set up socket
 context = zmq.Context()
 socket = context.socket(zmq.REP)
 socket.bind("tcp://*:5554")
-
-# initial startup message
 print("\nSocket listening at port 5554...")
 
 
@@ -34,14 +34,19 @@ def standings_request(request):
         print(f"Sending {group} standings data...\n")
         socket.send_json(json.dumps(standings))
 
+    else:
+        error_message()
+
 
 def send_standings_request(group):
 
     print(f"Getting {group} standings data...")
 
+    season = get_season()
+
     url = "https://api-basketball.p.rapidapi.com/standings"
     querystring = {"league": "12",
-                   "season": "2022-2023",
+                   "season": season,
                    "stage": "NBA",
                    "group": group}
     headers = {
@@ -59,10 +64,7 @@ def parse_standings_data(data):
 
     standings = []
 
-    # test = [[x] for x in data['response'][0]]
-
-    # parse data to return to client
-    for value in data['response'][0]:           # re-write as list comprehension?
+    for value in data['response'][0]:
         position = value['position']
         name = value['team']['name']
         wins = value['games']['win']['total']
@@ -76,6 +78,16 @@ def parse_standings_data(data):
 def division_request(request):
 
     conference = request[:-10]
+    data = send_division_request(conference)
+    divisions = parse_division_data(data, conference)
+
+    # send response
+    print(f"Sending {message} Conference Division data...\n")
+    socket.send_json(json.dumps(divisions))
+
+
+def send_division_request(conference):
+
     print(f"Getting {conference}ern Conference Division data...")
 
     # set up request
@@ -87,6 +99,11 @@ def division_request(request):
     # request info from API
     response = requests.get(url, headers=headers)
     data = response.json()
+    return data
+
+
+def parse_division_data(data, conference):
+
     divisions = {}
 
     # parse data received to return to client
@@ -98,15 +115,18 @@ def division_request(request):
             else:
                 divisions[value['division']] = divisions[value['division']] + ", " + (value['full_name'])
 
-    # send response
-    print(f"Sending {message} Conference Division data...\n")
-    socket.send_json(json.dumps(divisions))
+    return divisions
 
 
-# def send_division_request(group):
+def error_message():
+    error_msg = "ERROR: Please try again."
+    socket.send_json(json.dumps(error_msg))
 
 
-# def parse_division_data(data):
+def get_season():
+    current_year = datetime.today().year
+    season = f"{str(current_year - 1)}-{str(current_year)}"
+    return season
 
 
 while True:
@@ -121,5 +141,4 @@ while True:
         case "Divisions":
             division_request(message)
         case _:
-            error_msg = "ERROR: Please try again."
-            socket.send_json(json.dumps(error_msg))
+            error_message()

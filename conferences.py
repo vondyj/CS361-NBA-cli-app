@@ -12,13 +12,13 @@ def conferences_menu():
         menu = inquirer.select(
             message='Conference Options:',
             choices=["View conferences and divisions",
-                     "View standings by conference",
+                     "View standings by conference (regular season)",
                      "Main menu"]
         ).execute()
 
         if menu == "View conferences and divisions":
             conference_divisions_menu()
-        elif menu == "View standings by conference":
+        elif menu == "View standings by conference (regular season)":
             conference_standings_menu()
         else:
             print("\n")

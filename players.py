@@ -18,9 +18,9 @@ def players_menu():
         ).execute()
 
         if menu == "Get information about a specific player":
-            specific_player()
+            get_specific_player()
         elif menu == "Get a random player":
-            random_player()
+            get_random_player()
         else:
             print("\n")
             return
@@ -37,7 +37,7 @@ def start_socket():
     return socket
 
 
-def specific_player():
+def get_specific_player():
 
     socket = start_socket()
 
@@ -50,39 +50,8 @@ def specific_player():
     # receive serialized data (JSON) from microservice
     player_data = json.loads(socket.recv())
 
-    # format data received for display
     if player_data != "ERROR: Invalid Search":
-
-        name = player_data["first_name"] + " " + player_data["last_name"]
-        team = player_data["team"]["full_name"]
-        position = player_data["position"]
-
-        match position:
-            case "C":
-                position = "Center"
-            case "G":
-                position = "Guard"
-            case "F":
-                position = "Forward"
-            case "C-F":
-                position = "Center Forward"
-            case "F-C":
-                position = "Forward Center"
-            case "":
-                position = "N/A"
-
-        if player_data["height_feet"] is None:
-            height = "N/A"
-        else:
-            height = str(player_data["height_feet"]) + " ft " + str(player_data["height_inches"]) + ' in'
-
-        if player_data["weight_pounds"] is None:
-            weight = "N/A"
-        else:
-            weight = str(player_data["weight_pounds"]) + " lbs"
-
-        table_data = [["Name", name], ["Position", position], ["Team", team], ["Height", height], ["Weight", weight]]
-
+        table_data = parse_player_data(player_data)
         # display data
         print(tabulate(table_data, tablefmt="heavy_grid"))
 
@@ -90,15 +59,49 @@ def specific_player():
         print(f"\n{player_data}\n")
 
 
-def random_player():
+def parse_player_data(data):
+
+    name = data["first_name"] + " " + data["last_name"]
+    team = data["team"]["full_name"]
+    position = data["position"]
+
+    match position:
+        case "C":
+            position = "Center"
+        case "G":
+            position = "Guard"
+        case "F":
+            position = "Forward"
+        case "C-F":
+            position = "Center Forward"
+        case "F-C":
+            position = "Forward Center"
+        case "":
+            position = "N/A"
+
+    match data["height_feet"]:
+        case None:
+            height = "N/A"
+        case _:
+            height = str(data["height_feet"]) + " ft " + str(data["height_inches"]) + ' in'
+
+    match data["weight_pounds"]:
+        case None:
+            weight = "N/A"
+        case _:
+            weight = str(data["weight_pounds"]) + " lbs"
+
+    table_data = [["Name", name], ["Position", position], ["Team", team], ["Height", height], ["Weight", weight]]
+
+    return table_data
+
+
+def get_random_player():
 
     socket = start_socket()
 
     # send request to NBA_Player_Microservice.py
     socket.send_string("random")
 
-    # receive response from NBA_Player_Microservice.py
     player = socket.recv_string()
-
-    # display random player name
     print(f"\n{player}\n")

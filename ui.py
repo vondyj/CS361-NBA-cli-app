@@ -33,18 +33,19 @@ def main_menu():
 
         print("\n")
 
-        if menu == "Conferences":           # implemented
-            conferences_menu()
-        elif menu == "Teams":               # TO DO
-            teams_menu()
-        elif menu == "Players":             # in progress
-            players_menu()
-        elif menu == "Games":               # TO DO
-            games_menu()
-        elif menu == "Resources used":      # TO DO
-            resources()
-        else:
-            return
+        match menu:
+            case "Conferences":             # implemented
+                conferences_menu()
+            case "Teams":                   # TO DO
+                teams_menu()
+            case "Players":                 # implemented
+                players_menu()
+            case "Games":                   # in-progress
+                games_menu()
+            case "Resources used":          # in-progress
+                resources()
+            case _:
+                return
 
 
 def intro_message():
