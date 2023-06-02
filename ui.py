@@ -43,7 +43,10 @@ def main_menu():
             case "Games":                   # in-progress
                 games_menu()
             case "Resources used":          # in-progress
+                print("test")
                 resources()
+            case "Exit":
+                return
             case _:
                 return
 
@@ -54,15 +57,13 @@ def intro_message():
     intro_text = f"\nWelcome to my NBA CLI App. To navigate through the app please use the “up” and “down” arrow keys" \
                  " to choose a menu option then hit “return” to select it.\n"
 
-    print(f"\n")
-    print(title_text)
-    print(intro_text)
+    print(f"\n{title_text}\n{intro_text}")
 
 
 def outro_message():
 
     end_text = pyfiglet.figlet_format("SEE YA!", font="3-d")
-    print(end_text)
+    print(f"\n{end_text}")
 
 
 if __name__ == "__main__":

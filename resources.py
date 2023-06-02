@@ -37,6 +37,3 @@ def APIs_used():
 
     print(tabulate((item for item in data), headings, tablefmt="heavy_grid"))
     print(f"\n")
-
-
-resources()
