@@ -30,7 +30,7 @@ def start_socket():
     # set up communication with games-service.py
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
-    socket.connect("tcp://localhost:9999")
+    socket.connect("tcp://localhost:5553")
 
     # return the socket to the method that called it for communication purposes
     return socket

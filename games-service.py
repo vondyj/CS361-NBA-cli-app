@@ -8,8 +8,8 @@ from datetime import datetime
 # set up socket
 context = zmq.Context()
 socket = context.socket(zmq.REP)
-socket.bind("tcp://*:9999")
-print("\nSocket listening at port 9999...")
+socket.bind("tcp://*:5553")
+print("\nSocket listening at port 5553...")
 
 
 def games_in_progress_request():
