@@ -13,10 +13,11 @@ def teams_menu():
 
         ).execute()
 
-        if menu == "Get stats for a specific team":
-            print("\n PLACEHOLDER: Get stats for a specific team \n")
-        elif menu == "Get a random team":
-            print("\n PLACEHOLDER: Get a random team \n")
-        else:
-            print("\n")
-            break
+        match menu:
+            case "Get stats for a specific team":
+                print("\n PLACEHOLDER: Get stats for a specific team \n")
+            case "Get a random team":
+                print("\n PLACEHOLDER: Get a random team \n")
+            case _:
+                print("\n")
+                return

@@ -7,9 +7,11 @@ import requests
 import json
 import zmq
 
+from config import api_basketball_key, free_nba_key
+
 from datetime import datetime
 
-# set up socket
+# set up socket on start 
 context = zmq.Context()
 socket = context.socket(zmq.REP)
 socket.bind("tcp://*:5554")
@@ -17,7 +19,6 @@ print("\nSocket listening at port 5554...")
 
 
 def standings_request(request):
-
     match request[:-10]:
         case "West":
             group = "Western Conference"
@@ -27,23 +28,19 @@ def standings_request(request):
             group = None
 
     if group:
-
         data = send_standings_request(group)
         standings = parse_standings_data(data)
 
         print(f"Sending {group} standings data...\n")
         socket.send_json(json.dumps(standings))
-
     else:
         error_message()
 
 
 def send_standings_request(group):
-
     print(f"Getting {group} standings data...")
 
     season = get_season()
-
     url = "https://api-basketball.p.rapidapi.com/standings"
     querystring = {"league": "12",
                    "season": season,
@@ -51,7 +48,7 @@ def send_standings_request(group):
                    "group": group}
     headers = {
         "content-type": "application/octet-stream",
-        "X-RapidAPI-Key": "819d583bd4mshb1f58b42eb6bd5fp143f39jsn6aed4cda8d08",
+        "X-RapidAPI-Key": api_basketball_key,
         "X-RapidAPI-Host": "api-basketball.p.rapidapi.com"
     }
 
@@ -61,22 +58,18 @@ def send_standings_request(group):
 
 
 def parse_standings_data(data):
-
     standings = []
 
     for value in data['response'][0]:
-        position = value['position']
-        name = value['team']['name']
-        wins = value['games']['win']['total']
-        losses = value['games']['lose']['total']
-
-        standings.append([position, name, wins, losses])
+        standings.append([value['position'], 
+                          value['team']['name'], 
+                          value['games']['win']['total'], 
+                          value['games']['lose']['total']])
 
     return standings
 
 
 def division_request(request):
-
     conference = request[:-10]
     data = send_division_request(conference)
     divisions = parse_division_data(data, conference)
@@ -87,13 +80,12 @@ def division_request(request):
 
 
 def send_division_request(conference):
-
     print(f"Getting {conference}ern Conference Division data...")
 
     # set up request
     url = "https://free-nba.p.rapidapi.com/teams"
     headers = {"content-type": "application/octet-stream",
-               "X-RapidAPI-Key": "819d583bd4mshb1f58b42eb6bd5fp143f39jsn6aed4cda8d08",
+               "X-RapidAPI-Key": free_nba_key,
                "X-RapidAPI-Host": "free-nba.p.rapidapi.com"}
 
     # request info from API
@@ -103,7 +95,6 @@ def send_division_request(conference):
 
 
 def parse_division_data(data, conference):
-
     divisions = {}
 
     # parse data received to return to client
@@ -130,7 +121,6 @@ def get_season():
 
 
 while True:
-
     # receive request from client
     message = socket.recv_string()
     print(f"\nReceived message: {message}")

@@ -6,7 +6,6 @@ from tabulate import tabulate
 
 
 def players_menu():
-
     # will be displayed until the user selects "Main menu"
     while True:
         menu = inquirer.select(
@@ -28,7 +27,6 @@ def players_menu():
 
 
 def start_socket():
-
     # set up communication with NBA_Player_Microservice.py
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
@@ -39,10 +37,8 @@ def start_socket():
 
 
 def get_specific_player():
-
     socket = start_socket()
 
-    # get user input
     user_input = input("Enter player name (partial names are searchable): ")
 
     # send request to NBA_Player_Microservice.py
@@ -60,7 +56,6 @@ def get_specific_player():
 
 
 def parse_player_data(data):
-
     name = data["first_name"] + " " + data["last_name"]
     team = data["team"]["full_name"]
     position = data["position"]
@@ -97,7 +92,6 @@ def parse_player_data(data):
 
 
 def get_random_player():
-
     socket = start_socket()
 
     # send request to NBA_Player_Microservice.py

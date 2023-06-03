@@ -6,7 +6,6 @@ from tabulate import tabulate
 
 
 def conferences_menu():
-
     #  will be displayed until the user selects "Main menu"
     while True:
         menu = inquirer.select(
@@ -27,10 +26,8 @@ def conferences_menu():
 
 
 def conference_divisions_menu():
-
     # will be displayed until user selects "Return"
     while True:
-
         menu = inquirer.select(
             message="Conference:",
             choices=["Western",
@@ -48,7 +45,6 @@ def conference_divisions_menu():
 
 
 def conference_standings_menu():
-
     # will run until user selects "Return"
     while True:
 
@@ -69,7 +65,6 @@ def conference_standings_menu():
         
 
 def start_socket():
-
     # set up communication with conference-service.py
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
@@ -80,7 +75,6 @@ def start_socket():
 
 
 def conferences(conference):
-
     # send request to conference-service.py
     socket = start_socket()
     socket.send_string(conference)
@@ -97,7 +91,6 @@ def conferences(conference):
 
 
 def standings(conference):
-
     # send request to conference-service.py
     socket = start_socket()
     socket.send_string(conference)

@@ -10,18 +10,15 @@ from resources import resources
 
 
 def main():
-
     intro_message()
     main_menu()
     outro_message()
 
 
 def main_menu():
-
     # display the menu until the user chooses "Exit"
     while True:
         menu = inquirer.select(
-
             message="Main Menu: What would you like to learn about?",
             choices=["Conferences",
                      "Teams",
@@ -30,7 +27,6 @@ def main_menu():
                      "Resources used",
                      "Exit"]
         ).execute()
-
         print("\n")
 
         match menu:
@@ -52,16 +48,13 @@ def main_menu():
 
 
 def intro_message():
-
     title_text = pyfiglet.figlet_format("NBA CLI APP", font="3-d")
     intro_text = f"\nWelcome to my NBA CLI App. To navigate through the app please use the “up” and “down” arrow keys" \
                  " to choose a menu option then hit “return” to select it.\n"
-
     print(f"\n{title_text}\n{intro_text}")
 
 
 def outro_message():
-
     end_text = pyfiglet.figlet_format("SEE YA!", font="3-d")
     print(f"\n{end_text}")
 

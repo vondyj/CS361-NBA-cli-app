@@ -1,3 +1,5 @@
+# A microservice that retrieves data about NBA games in progress from the Ball Don't Lie API (https://www.balldontlie.io/api/v1/games)
+# The service parses that data and then returns it utlizing a request reply socket.
 import zmq
 import requests
 
@@ -52,6 +54,7 @@ def parse_games_in_progress_data(data):
 
 def get_today():
 
+    # must be in YYYY-MM-DD format for API request
     return datetime.today().strftime('%Y-%m-%d')
 
 

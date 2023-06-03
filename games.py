@@ -6,7 +6,6 @@ from datetime import datetime
 
 
 def games_menu():
-
     # will run until the user selects "Main menu"
     while True:
         menu = inquirer.select(
@@ -28,8 +27,7 @@ def games_menu():
 
 
 def start_socket():
-
-    # set up communication with conference-service.py
+    # set up communication with games-service.py
     context = zmq.Context()
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://localhost:9999")
@@ -39,10 +37,12 @@ def start_socket():
 
 
 def games_in_progress(message):
-
     socket = start_socket()
+
+    # send request to games-service.py
     socket.send_string(message)
 
+    # receive reply 
     data = socket.recv_json()
 
     match data:
