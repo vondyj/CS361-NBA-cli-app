@@ -39,7 +39,6 @@ def main_menu():
             case "Games":                   # in-progress
                 games_menu()
             case "Resources used":          # in-progress
-                print("test")
                 resources()
             case "Exit":
                 return
