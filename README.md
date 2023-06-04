@@ -36,6 +36,11 @@ rand_player = socket.recv().decode()
 [Python | ASCII art using pyfiglet module](https://www.geeksforgeeks.org/python-ascii-art-using-pyfiglet-module/?ref=lbp#)
 ### InquirerPy
 [Read the docs](https://inquirerpy.readthedocs.io/en/latest/)
+### PyPI
+[Requests](https://pypi.org/project/requests/)
+[Tabulate](https://pypi.org/project/tabulate/)
+### W3Schools
+[Pyhton Requests Module](https://www.w3schools.com/python/module_requests.asp)
 ### ZeroMQ 
 [Get started](https://zeromq.org/get-started/)
   
